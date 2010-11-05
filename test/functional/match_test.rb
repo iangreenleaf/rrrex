@@ -1,4 +1,6 @@
 require 'test/unit'
+require 'rubygems'
+require 'mocha'
 require 'Match'
 
 class MatchTest < Test::Unit::TestCase
@@ -22,6 +24,16 @@ class MatchTest < Test::Unit::TestCase
       m = TRegex::Match.new pattern
       assert_nil m.match string
     end
+  end
+
+  def test_inline_match_triggers_module
+    rxp_stub = stub "TRegex::Match", { :match => true }
+    TRegex::Match.expects(:new).with("oo").returns(rxp_stub)
+    "foobar".rmatch do "oo" end
+  end
+
+  def test_match_simple_string_inline
+    assert( "foobar".rmatch do "oo" end )
   end
 
 end

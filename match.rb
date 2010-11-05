@@ -1,3 +1,10 @@
+class String
+  def rmatch( &block )
+    pattern = TRegex.module_exec &block
+    TRegex::Match.new( pattern ).match self
+  end
+end
+
 module TRegex
   class Match
 
@@ -13,5 +20,8 @@ module TRegex
       Regexp.new( to_regexp_string ).match str
     end
 
+  end
+
+  class String
   end
 end
