@@ -33,7 +33,19 @@ class MatchTest < Test::Unit::TestCase
   end
 
   def test_match_simple_string_inline
-    assert( "foobar".rmatch do "oo" end )
+    assert( "foobar".rmatch do s "oo" end )
+  end
+
+  def test_dont_match_simple_string_inline
+    assert_nil( "foobar".rmatch do s "xy" end )
+  end
+
+  def test_match_or
+    assert( "foobar".rmatch do s("xy").or s("foo") end )
+  end
+
+  def test_match_any
+    assert( "foobar".rmatch do s("o").any end )
   end
 
 end
