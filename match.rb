@@ -5,8 +5,12 @@ module TRegex
       @pattern = pattern
     end
 
-    def to_regexp
+    def to_regexp_string
       @pattern
+    end
+
+    def match(str)
+      Regexp.new( to_regexp_string ).match str
     end
 
   end
