@@ -33,23 +33,32 @@ class MatchTest < Test::Unit::TestCase
   end
 
   def test_match_simple_string_inline
-    assert( "foobar".rmatch do s "oo" end )
+    assert_match "oo", "foobar" do s "oo" end
   end
 
   def test_dont_match_simple_string_inline
-    assert_nil( "foobar".rmatch do s "xy" end )
+    assert_no_match "foobar" do s "xy" end
   end
 
   def test_match_or
-    assert( "foobar".rmatch do s("xy").or s("foo") end )
+    assert_match "foo", "foobar" do s("xy").or s("foo") end
   end
 
   def test_match_any
-    assert( "foobar".rmatch do s("o").any end )
+    assert_match "aaaaa", "aaaaab" do s("a").any end
   end
 
   def test_match_concat
-    assert( "foobar".rmatch do s("foo") + s("bar") end )
+    assert_match "foobar", "foobar" do s("foo") + s("bar") end
+  end
+
+  def assert_no_match( string, &block )
+    assert_nil( string.rmatch( &block ) )
+  end
+
+  def assert_match( expected, string, &block )
+    assert( matches = string.rmatch( &block ) )
+    assert_equal expected, matches[0]
   end
 
 end
