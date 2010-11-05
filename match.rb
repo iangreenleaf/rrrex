@@ -37,6 +37,10 @@ module TRegex
       AnyMatch.new self
     end
 
+    def +(p)
+      ConcatMatch.new self, p
+    end
+
   end
 
   class OrMatch < Match
@@ -46,6 +50,16 @@ module TRegex
 
     def to_regexp_string
       @patterns.map {|p| p.to_regexp_string }.join "|"
+    end
+  end
+
+  class ConcatMatch < Match
+    def initialize(p1, p2)
+      @patterns = [p1, p2]
+    end
+
+    def to_regexp_string
+      @patterns.map {|p| p.to_regexp_string }.join ""
     end
   end
 

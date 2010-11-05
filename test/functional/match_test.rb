@@ -48,4 +48,8 @@ class MatchTest < Test::Unit::TestCase
     assert( "foobar".rmatch do s("o").any end )
   end
 
+  def test_match_concat
+    assert( "foobar".rmatch do s("foo") + s("bar") end )
+  end
+
 end
