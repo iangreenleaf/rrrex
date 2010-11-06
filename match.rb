@@ -17,12 +17,10 @@ module TRegex
       @atom = atom
     end
 
-    def to_regexp_string
-      if @atom.is_a? Match
-        @atom.to_regexp_string
-      else
-        @atom
-      end
+    def to_regexp_string(s=nil)
+      s ||= @atom
+      s = s.to_regexp_string if s.is_a? Match
+      "(#{s})"
     end
 
     def match(str)
@@ -49,7 +47,7 @@ module TRegex
     end
 
     def to_regexp_string
-      @atoms.map {|p| p.to_regexp_string }.join "|"
+      super @atoms.map {|p| p.to_regexp_string }.join "|"
     end
   end
 
@@ -59,13 +57,13 @@ module TRegex
     end
 
     def to_regexp_string
-      @atoms.map {|p| p.to_regexp_string }.join ""
+      super @atoms.map {|p| p.to_regexp_string }.join ""
     end
   end
 
   class AnyMatch < Match
     def to_regexp_string
-      @atom.to_regexp_string + "*"
+      super @atom.to_regexp_string + "*"
     end
   end
 end

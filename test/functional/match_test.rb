@@ -5,13 +5,6 @@ require 'Match'
 
 class MatchTest < Test::Unit::TestCase
 
-  def test_compile_simple_string
-    [ "a", "abc def", "úñícode" ].each do |s|
-      m = TRegex::Match.new s
-      assert_equal s, m.to_regexp_string
-    end
-  end
-
   def test_match_simple_string
     [ ["a", "a"], ["bc", "babb bc"], ["úñícode", "i like úñícode"] ].each do |pattern,string|
       m = TRegex::Match.new pattern
@@ -45,11 +38,19 @@ class MatchTest < Test::Unit::TestCase
   end
 
   def test_match_any
+    assert_match "", "foobar" do s("o").any end
     assert_match "aaaaa", "aaaaab" do s("a").any end
+    assert_match "fo", "foobar" do s("fo").any end
+    assert_match "abab", "ababaab" do s("ab").any end
   end
 
   def test_match_concat
     assert_match "foobar", "foobar" do s("foo") + s("bar") end
+  end
+
+  def test_grouping
+    assert_match "foobar", "foobar" do s("foo") + ( s("xyz").or s("bar") ) end
+    assert_match "bar", "foobar" do ( s("xyz") + s("foo") ).or s("bar") end
   end
 
   def assert_no_match( string, &block )
