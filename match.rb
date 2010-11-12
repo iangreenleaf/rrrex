@@ -18,7 +18,10 @@ module TRegex
     end
 
     def to_regexp_string(s=nil)
-      s ||= @atom
+      if s.nil?
+        s = @atom
+        s = Regexp.escape @atom if ! s.is_a? Match
+      end
       s = s.to_regexp_string if s.is_a? Match
       "(#{s})"
     end

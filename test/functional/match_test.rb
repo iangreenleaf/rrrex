@@ -33,6 +33,11 @@ class MatchTest < Test::Unit::TestCase
     assert_no_match "foobar" do s "xy" end
   end
 
+  def test_special_characters_escaped_in_string
+    assert_no_match "foobar" do s "o+" end
+    assert_match "o+", "+hello+" do s("o+") end
+  end
+
   def test_match_or
     assert_match "foo", "foobar" do s("xy").or s("foo") end
   end
