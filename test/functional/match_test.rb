@@ -51,11 +51,13 @@ class MatchTest < Test::Unit::TestCase
 
   def test_match_concat
     assert_match "foobar", "foobar" do s("foo") + s("bar") end
+    assert_match "foobarbaz", "foobarbazbar" do s("foo") + s("bar") + s("baz") end
   end
 
   def test_grouping
     assert_match "foobar", "foobar" do s("foo") + ( s("xyz").or s("bar") ) end
     assert_match "bar", "foobar" do ( s("xyz") + s("foo") ).or s("bar") end
+    assert_match "fo", "foobar" do ( s("xyz") + s("foo") ).or( s("xyz").or s("fo") ).or( s("foo") + s("xyz") ) end
   end
 
   def assert_no_match( string, &block )
