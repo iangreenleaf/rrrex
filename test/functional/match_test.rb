@@ -60,6 +60,11 @@ class MatchTest < Test::Unit::TestCase
     assert_match "fo", "foobar" do ( s("xyz") + s("foo") ).or( s("xyz").or s("fo") ).or( s("foo") + s("xyz") ) end
   end
 
+  def test_dont_add_extra_backreferences
+    mdata = "foobar".rmatch do s("foo") + ( s("xyz").or s("bar") ) end
+    assert_equal 1, mdata.length
+  end
+
   def assert_no_match( string, &block )
     assert_nil( string.rmatch( &block ) )
   end
