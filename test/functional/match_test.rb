@@ -7,21 +7,21 @@ class MatchTest < Test::Unit::TestCase
 
   def test_match_simple_string
     [ ["a", "a"], ["bc", "babb bc"], ["úñícode", "i like úñícode"] ].each do |pattern,string|
-      m = TRegex::Match.new pattern
+      m = TRegex::StringMatch.new pattern
       assert m.match string
     end
   end
 
   def test_dont_match_simple_string
     [ ["a", "b"], ["bc", "bac def"], ["úñícode", "i like unicode"] ].each do |pattern,string|
-      m = TRegex::Match.new pattern
+      m = TRegex::StringMatch.new pattern
       assert_nil m.match string
     end
   end
 
   def test_inline_match_triggers_module
     rxp_stub = stub "TRegex::Match", { :match => true }
-    TRegex::Match.expects(:new).with("oo").returns(rxp_stub)
+    TRegex::StringMatch.expects(:new).with("oo").returns(rxp_stub)
     "foobar".rmatch? do "oo" end
   end
 

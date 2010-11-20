@@ -1,7 +1,7 @@
 class String
   def plus_with_regexp( str2 )
     if str2.kind_of? TRegex::Match
-      TRegex::Match.new( self ) + str2
+      TRegex::StringMatch.new( self ) + str2
     else
       self.plus_without_regexp str2
     end
@@ -11,7 +11,7 @@ class String
 
   def method_missing_with_regexp( name, *args, &block )
     if [ :or, :and ].include? name
-      TRegex::Match.new( self ).send name, *args
+      TRegex::StringMatch.new( self ).send name, *args
     else
       method_missing_without_regexp name, *args, &block
     end
@@ -20,15 +20,15 @@ class String
   alias_method :method_missing, :method_missing_with_regexp
 
   def rmatch?( &block )
-    pattern = TRegex.module_exec &block
-    TRegex::Match.new( pattern ).match self
+    pattern = TRegex::Match.convert TRegex.module_exec &block
+    pattern.match self
   end
 end
 
 module TRegex
 
   def self.s(str)
-    Match.new str
+    StringMatch.new str
   end
 
   def self.any r
@@ -36,23 +36,11 @@ module TRegex
   end
 
   class Match
-
-    attr_reader :atom
-
-    def initialize( a )
-      @atom = a
+    def self.convert( atom )
+      atom.kind_of?( Match ) ? atom : StringMatch.new( atom )
     end
 
-    def atom=( a )
-      @atom = a.kind_of?( Match ) ? a : Match.new( a )
-    end
-
-    def to_regexp_string(s=nil)
-      if s.nil?
-        s = atom
-        s = Regexp.escape s if ! s.is_a? Match
-      end
-      s = s.to_regexp_string if s.is_a? Match
+    def group( s )
       "(?:#{s})"
     end
 
@@ -68,34 +56,62 @@ module TRegex
       ConcatMatch.new self, p
     end
 
+    protected
+    def input( atom )
+      self.class.convert atom
+    end
+  end
+
+  class SingleAtomMatch < Match
+
+    attr_reader :atom
+
+    def initialize( a )
+      self.atom = a
+    end
+
+    def atom=( a )
+      @atom = input a
+    end
+
+    def to_regexp_string
+      group atom.to_regexp_string
+    end
+  end
+
+  class StringMatch < SingleAtomMatch
+    def initialize( a )
+      @atom = a
+    end
+
+    def to_regexp_string
+      group Regexp.escape atom
+    end
   end
 
   class CompositeMatch < Match
     def initialize(*args)
       @atoms = args.collect do |a|
-        a.kind_of?( Match ) ? a : Match.new( a )
+        input a
       end
     end
   end
 
   class OrMatch < CompositeMatch
     def to_regexp_string
-      super @atoms.map {|p| p.to_regexp_string }.join "|"
+      group @atoms.map {|p| p.to_regexp_string }.join "|"
     end
   end
 
   class ConcatMatch < CompositeMatch
     def to_regexp_string
-      super @atoms.map {|p| p.to_regexp_string }.join ""
+      group @atoms.map {|p| p.to_regexp_string }.join ""
     end
   end
 
-  class AnyMatch < Match
-    def initialize( a )
-      self.atom = a
-    end
+  class AnyMatch < SingleAtomMatch
     def to_regexp_string
-      super atom.to_regexp_string + "*"
+      group atom.to_regexp_string + "*"
     end
   end
 end
