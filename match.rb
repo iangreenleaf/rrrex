@@ -31,16 +31,26 @@ module TRegex
     Match.new str
   end
 
+  def self.any r
+    AnyMatch.new r
+  end
+
   class Match
 
-    def initialize(atom)
-      @atom = atom
+    attr_reader :atom
+
+    def initialize( a )
+      @atom = a
+    end
+
+    def atom=( a )
+      @atom = a.kind_of?( Match ) ? a : Match.new( a )
     end
 
     def to_regexp_string(s=nil)
       if s.nil?
-        s = @atom
-        s = Regexp.escape @atom if ! s.is_a? Match
+        s = atom
+        s = Regexp.escape s if ! s.is_a? Match
       end
       s = s.to_regexp_string if s.is_a? Match
       "(?:#{s})"
@@ -52,10 +62,6 @@ module TRegex
 
     def or(atom)
       OrMatch.new self, atom
-    end
-
-    def any
-      AnyMatch.new self
     end
 
     def +(p)
@@ -85,8 +91,11 @@ module TRegex
   end
 
   class AnyMatch < Match
+    def initialize( a )
+      self.atom = a
+    end
     def to_regexp_string
-      super @atom.to_regexp_string + "*"
+      super atom.to_regexp_string + "*"
     end
   end
 end
