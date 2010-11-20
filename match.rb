@@ -9,15 +9,18 @@ class String
   alias_method :plus_without_regexp, :+
   alias_method :+, :plus_with_regexp
 
-  def method_missing( name, *args )
+  def method_missing_with_regexp( name, *args, &block )
     if [ :or, :and ].include? name
       args.collect! do |a|
         a.kind_of?( TRegex::Match ) ? a : TRegex::Match.new( a )
       end
       TRegex::Match.new( self ).send name, *args
+    else
+      method_missing_without_regexp name, *args, &block
     end
-    #TODO alias like a nice boy
   end
+  alias_method :method_missing_without_regexp, :method_missing
+  alias_method :method_missing, :method_missing_with_regexp
 
   def rmatch?( &block )
     pattern = TRegex.module_exec &block
