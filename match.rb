@@ -11,9 +11,6 @@ class String
 
   def method_missing_with_regexp( name, *args, &block )
     if [ :or, :and ].include? name
-      args.collect! do |a|
-        a.kind_of?( TRegex::Match ) ? a : TRegex::Match.new( a )
-      end
       TRegex::Match.new( self ).send name, *args
     else
       method_missing_without_regexp name, *args, &block
@@ -67,21 +64,21 @@ module TRegex
 
   end
 
-  class OrMatch < Match
-    def initialize(p1, p2)
-      @atoms = [p1, p2]
+  class CompositeMatch < Match
+    def initialize(*args)
+      @atoms = args.collect do |a|
+        a.kind_of?( Match ) ? a : Match.new( a )
+      end
     end
+  end
 
+  class OrMatch < CompositeMatch
     def to_regexp_string
       super @atoms.map {|p| p.to_regexp_string }.join "|"
     end
   end
 
-  class ConcatMatch < Match
-    def initialize(p1, p2)
-      @atoms = [p1, p2]
-    end
-
+  class ConcatMatch < CompositeMatch
     def to_regexp_string
       super @atoms.map {|p| p.to_regexp_string }.join ""
     end

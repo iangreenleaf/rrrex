@@ -40,7 +40,6 @@ class MatchTest < Test::Unit::TestCase
 
   def test_match_or
     assert_match "foo", "foobar" do "xy".or "foo" end
-    assert_match "foo", "foobar" do s("xy").or "foo" end
   end
 
   def test_match_any
