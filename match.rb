@@ -62,7 +62,7 @@ module TRegex
     end
   end
 
-  class SingleAtomMatch < Match
+  module SingleAtomMatch
 
     attr_reader :atom
 
@@ -79,7 +79,16 @@ module TRegex
     end
   end
 
-  class StringMatch < SingleAtomMatch
+  module CompositeMatch
+    def initialize(*args)
+      @atoms = args.collect do |a|
+        input a
+      end
+    end
+  end
+
+  class StringMatch < Match
+   include SingleAtomMatch
     def initialize( a )
       @atom = a
     end
@@ -89,27 +98,22 @@ module TRegex
     end
   end
 
-  class CompositeMatch < Match
-    def initialize(*args)
-      @atoms = args.collect do |a|
-        input a
-      end
-    end
-  end
-
-  class OrMatch < CompositeMatch
+  class OrMatch < Match
+   include CompositeMatch
     def to_regexp_string
       group @atoms.map {|p| p.to_regexp_string }.join "|"
     end
   end
 
-  class ConcatMatch < CompositeMatch
+  class ConcatMatch < Match
+   include CompositeMatch
     def to_regexp_string
       group @atoms.map {|p| p.to_regexp_string }.join ""
     end
   end
 
-  class AnyMatch < SingleAtomMatch
+  class AnyMatch < Match
+   include SingleAtomMatch
     def to_regexp_string
       group atom.to_regexp_string + "*"
     end
