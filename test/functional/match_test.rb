@@ -35,11 +35,12 @@ class MatchTest < Test::Unit::TestCase
 
   def test_special_characters_escaped_in_string
     assert_no_match "foobar" do s "o+" end
-    assert_match "o+", "+hello+" do s("o+") end
+    assert_match "o+", "+hello+" do "o+" end
   end
 
   def test_match_or
-    assert_match "foo", "foobar" do s("xy").or s("foo") end
+    assert_match "foo", "foobar" do "xy".or "foo" end
+    assert_match "foo", "foobar" do s("xy").or "foo" end
   end
 
   def test_match_any
@@ -50,14 +51,14 @@ class MatchTest < Test::Unit::TestCase
   end
 
   def test_match_concat
-    assert_match "foobar", "foobar" do s("foo") + s("bar") end
-    assert_match "foobarbaz", "foobarbazbar" do s("foo") + s("bar") + s("baz") end
+    assert_match "foobar", "foobar" do "foo" + "bar" end
+    assert_match "foobarbaz", "foobarbazbar" do "foo" + "bar" + "baz" end
   end
 
   def test_grouping
-    assert_match "foobar", "foobar" do s("foo") + ( s("xyz").or s("bar") ) end
-    assert_match "bar", "foobar" do ( s("xyz") + s("foo") ).or s("bar") end
-    assert_match "fo", "foobar" do ( s("xyz") + s("foo") ).or( s("xyz").or s("fo") ).or( s("foo") + s("xyz") ) end
+    assert_match "foobar", "foobar" do "foo" + ( "xyz".or "bar" ) end
+    assert_match "bar", "foobar" do ( "xyz" + "foo" ).or "bar" end
+    assert_match "fo", "foobar" do ( "xyz" + "foo" ).or( "xyz".or "fo" ).or( "foo" + "xyz" ) end
   end
 
   def test_dont_add_extra_backreferences

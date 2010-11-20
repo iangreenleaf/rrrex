@@ -1,4 +1,24 @@
 class String
+  def plus_with_regexp( str2 )
+    if str2.kind_of? TRegex::Match
+      TRegex::Match.new( self ) + str2
+    else
+      self.plus_without_regexp str2
+    end
+  end
+  alias_method :plus_without_regexp, :+
+  alias_method :+, :plus_with_regexp
+
+  def method_missing( name, *args )
+    if [ :or, :and ].include? name
+      args.collect! do |a|
+        a.kind_of?( TRegex::Match ) ? a : TRegex::Match.new( a )
+      end
+      TRegex::Match.new( self ).send name, *args
+    end
+    #TODO alias like a nice boy
+  end
+
   def rmatch( &block )
     pattern = TRegex.module_exec &block
     TRegex::Match.new( pattern ).match self
