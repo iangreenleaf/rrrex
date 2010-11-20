@@ -19,7 +19,7 @@ class String
     #TODO alias like a nice boy
   end
 
-  def rmatch( &block )
+  def rmatch?( &block )
     pattern = TRegex.module_exec &block
     TRegex::Match.new( pattern ).match self
   end

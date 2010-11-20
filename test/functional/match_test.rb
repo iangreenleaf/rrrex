@@ -22,7 +22,7 @@ class MatchTest < Test::Unit::TestCase
   def test_inline_match_triggers_module
     rxp_stub = stub "TRegex::Match", { :match => true }
     TRegex::Match.expects(:new).with("oo").returns(rxp_stub)
-    "foobar".rmatch do "oo" end
+    "foobar".rmatch? do "oo" end
   end
 
   def test_match_simple_string_inline
@@ -62,16 +62,16 @@ class MatchTest < Test::Unit::TestCase
   end
 
   def test_dont_add_extra_backreferences
-    mdata = "foobar".rmatch do s("foo") + ( s("xyz").or s("bar") ) end
+    mdata = "foobar".rmatch? do "foo" + ( "xyz".or "bar" ) end
     assert_equal 1, mdata.length
   end
 
   def assert_no_match( string, &block )
-    assert_nil( string.rmatch( &block ) )
+    assert_nil( string.rmatch?( &block ) )
   end
 
   def assert_match( expected, string, &block )
-    assert( matches = string.rmatch( &block ) )
+    assert( matches = string.rmatch?( &block ) )
     assert_equal expected, matches[0]
   end
 
