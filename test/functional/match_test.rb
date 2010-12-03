@@ -54,10 +54,28 @@ class MatchTest < Test::Unit::TestCase
     assert_match "foobarbaz", "foobarbazbar" do "foo" + "bar" + "baz" end
   end
 
+  def test_match_num_exactly
+    assert_match "oo", "foobar" do 2.exactly "o" end
+    assert_match "oo", "foooobar" do 2.exactly "o" end
+    assert_no_match "foobar" do 3.exactly "o" end
+    assert_match "foobar", "foobar" do "f" + 2.exactly( "o" ) + "bar" end
+    assert_no_match "foobar" do "f" + 1.exactly( "o" ) + "bar" end
+  end
+
   def test_match_num_or_more
     assert_match "oo", "foobar" do 2.or_more "o" end
     assert_match "foooo", "foooobar" do "f" + 2.or_more( "o" ) end
     assert_no_match "foobar" do 3.or_more "o" end
+  end
+
+  def test_match_num_or_less
+    assert_match "xx", "xx" do 2.or_less "x" end
+    assert_match "xx", "xxxxxxxx" do 2.or_less "x" end
+    assert_match "xx", "xx" do 100.or_less "x" end
+    assert_match "foobar", "foobar" do "f" + 2.or_less( "o" ) + "bar" end
+    assert_match "fbar", "fbar" do "f" + 2.or_less( "o" ) + "bar" end
+    assert_no_match "foooobar" do "f" + 3.or_less( "o" ) + "bar" end
+    assert_match "", "xxxxx" do 3.or_less "y" end
   end
 
   def test_grouping

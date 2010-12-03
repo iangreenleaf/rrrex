@@ -26,8 +26,16 @@ class String
 end
 
 class Fixnum
+  def exactly( atom )
+    TRegex::NumberMatch.new atom, self, self
+  end
+
   def or_more( atom )
-    TRegex::OrMoreMatch.new atom, self
+    TRegex::NumberMatch.new atom, self, nil
+  end
+
+  def or_less( atom )
+    TRegex::NumberMatch.new atom, nil, self
   end
 end
 
@@ -125,15 +133,17 @@ module TRegex
     end
   end
 
-  class OrMoreMatch < Match
+  class NumberMatch < Match
     include SingleAtomMatch
-    def initialize( a, number )
+    def initialize( a, min, max )
       super a
-      @number = number
+      @min = min
+      @max = max
     end
 
     def to_regexp_string
-      group atom.to_regexp_string + "{#{@number},}"
+      # Subtle: when nil, we want min to convert to 0, but max to convert to ""
+      group atom.to_regexp_string + "{#{@min.to_i},#{@max}}"
     end
   end
 end
