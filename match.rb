@@ -25,6 +25,12 @@ class String
   end
 end
 
+class Fixnum
+  def or_more( atom )
+    TRegex::OrMoreMatch.new atom, self
+  end
+end
+
 module TRegex
 
   def self.s(str)
@@ -116,6 +122,18 @@ module TRegex
    include SingleAtomMatch
     def to_regexp_string
       group atom.to_regexp_string + "*"
+    end
+  end
+
+  class OrMoreMatch < Match
+    include SingleAtomMatch
+    def initialize( a, number )
+      super a
+      @number = number
+    end
+
+    def to_regexp_string
+      group atom.to_regexp_string + "{#{@number},}"
     end
   end
 end

@@ -54,6 +54,12 @@ class MatchTest < Test::Unit::TestCase
     assert_match "foobarbaz", "foobarbazbar" do "foo" + "bar" + "baz" end
   end
 
+  def test_match_num_or_more
+    assert_match "oo", "foobar" do 2.or_more "o" end
+    assert_match "foooo", "foooobar" do "f" + 2.or_more( "o" ) end
+    assert_no_match "foobar" do 3.or_more "o" end
+  end
+
   def test_grouping
     assert_match "foobar", "foobar" do "foo" + ( "xyz".or "bar" ) end
     assert_match "bar", "foobar" do ( "xyz" + "foo" ).or "bar" end
