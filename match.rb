@@ -51,6 +51,10 @@ module TRegex
     NumberMatch.new r, 0, nil
   end
 
+  def self.some r
+    NumberMatch.new r, 1, nil
+  end
+
   class Match
     def self.convert( atom )
       atom.kind_of?( Match ) ? atom : StringMatch.new( atom )

@@ -43,10 +43,17 @@ class MatchTest < Test::Unit::TestCase
   end
 
   def test_match_any
-    assert_match "", "foobar" do any("o") end
-    assert_match "aaaaa", "aaaaab" do any("a") end
-    assert_match "fo", "foobar" do any("fo") end
-    assert_match "abab", "ababaab" do any("ab") end
+    assert_match "x", "x" do any "x" end
+    assert_match "aaaaa", "aaaaab" do any "a" end
+    assert_match "abab", "ababaab" do any "ab" end
+    assert_match "", "xxxx" do any "y" end
+  end
+
+  def test_match_some
+    assert_match "x", "x" do some "x" end
+    assert_match "aaaaa", "aaaaab" do some "a" end
+    assert_match "abab", "ababaab" do some "ab" end
+    assert_no_match "xxxx" do some "y" end
   end
 
   def test_match_concat
