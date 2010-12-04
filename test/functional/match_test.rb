@@ -78,6 +78,15 @@ class MatchTest < Test::Unit::TestCase
     assert_match "", "xxxxx" do 3.or_less "y" end
   end
 
+  def test_match_range
+    assert_match "xx", "xx" do (2..4).of "x" end
+    assert_match "xxx", "xxx" do (2..100).of "x" end
+    assert_match "xxxx", "xxxxxxxx" do (2..4).of "x" end
+    assert_no_match "foobar" do "f" + (3..4).of( "o" ) + "bar" end
+    assert_no_match "foooooooobar" do "f" + (3..4).of( "o" ) + "bar" end
+    assert_no_match "xxxx" do (1..100).of( "y" ) + "bar" end
+  end
+
   def test_grouping
     assert_match "foobar", "foobar" do "foo" + ( "xyz".or "bar" ) end
     assert_match "bar", "foobar" do ( "xyz" + "foo" ).or "bar" end

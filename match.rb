@@ -39,6 +39,12 @@ class Fixnum
   end
 end
 
+class Range
+  def of( atom )
+    TRegex::NumberMatch.new atom, self.begin, self.end
+  end
+end
+
 module TRegex
 
   def self.s(str)
