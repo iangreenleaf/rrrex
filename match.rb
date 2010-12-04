@@ -48,7 +48,7 @@ end
 module TRegex
 
   def self.any r
-    AnyMatch.new r
+    NumberMatch.new r, 0, nil
   end
 
   class Match
@@ -125,13 +125,6 @@ module TRegex
    include CompositeMatch
     def to_regexp_string
       group @atoms.map {|p| p.to_regexp_string }.join ""
-    end
-  end
-
-  class AnyMatch < Match
-   include SingleAtomMatch
-    def to_regexp_string
-      group atom.to_regexp_string + "*"
     end
   end
 
