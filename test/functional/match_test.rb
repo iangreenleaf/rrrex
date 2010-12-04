@@ -26,15 +26,15 @@ class MatchTest < Test::Unit::TestCase
   end
 
   def test_match_simple_string_inline
-    assert_match "oo", "foobar" do s "oo" end
+    assert_match "oo", "foobar" do "oo" end
   end
 
   def test_dont_match_simple_string_inline
-    assert_no_match "foobar" do s "xy" end
+    assert_no_match "foobar" do "xy" end
   end
 
   def test_special_characters_escaped_in_string
-    assert_no_match "foobar" do s "o+" end
+    assert_no_match "foobar" do "o+" end
     assert_match "o+", "+hello+" do "o+" end
   end
 

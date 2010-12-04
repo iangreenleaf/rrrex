@@ -47,10 +47,6 @@ end
 
 module TRegex
 
-  def self.s(str)
-    StringMatch.new str
-  end
-
   def self.any r
     AnyMatch.new r
   end
