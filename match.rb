@@ -47,12 +47,18 @@ end
 
 module TRegex
 
+  WORD_CHAR = '\w'
+
   def self.any r
     NumberMatch.new r, 0, nil
   end
 
   def self.some r
     NumberMatch.new r, 1, nil
+  end
+
+  def self.word_char
+    UnescapedStringMatch.new WORD_CHAR
   end
 
   class Match
@@ -115,6 +121,12 @@ module TRegex
 
     def to_regexp_string
       wrap Regexp.escape atom
+    end
+  end
+
+  class UnescapedStringMatch < StringMatch
+    def to_regexp_string
+      wrap atom
     end
   end
 

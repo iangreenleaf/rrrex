@@ -105,6 +105,13 @@ class MatchTest < Test::Unit::TestCase
     assert_equal 1, mdata.length
   end
 
+  def test_word_characters
+    assert_match "f", "foobar" do word_char end
+    assert_match "foo_bar2", "### foo_bar2 baz bar" do some word_char end
+    assert_no_match '?/\<>.,;:"\'!@#$%^&*()[]{}' do word_char end
+    assert_no_match 'a,b,c,d' do 2.or_more word_char end
+  end
+
   def assert_no_match( string, &block )
     assert_nil( string.rmatch?( &block ) )
   end
