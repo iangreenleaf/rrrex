@@ -60,7 +60,7 @@ module TRegex
       atom.kind_of?( Match ) ? atom : StringMatch.new( atom )
     end
 
-    def group( s )
+    def wrap( s )
       "(?:#{s})"
     end
 
@@ -95,7 +95,7 @@ module TRegex
     end
 
     def to_regexp_string
-      group atom.to_regexp_string
+      wrap atom.to_regexp_string
     end
   end
 
@@ -114,21 +114,21 @@ module TRegex
     end
 
     def to_regexp_string
-      group Regexp.escape atom
+      wrap Regexp.escape atom
     end
   end
 
   class OrMatch < Match
    include CompositeMatch
     def to_regexp_string
-      group @atoms.map {|p| p.to_regexp_string }.join "|"
+      wrap @atoms.map {|p| p.to_regexp_string }.join "|"
     end
   end
 
   class ConcatMatch < Match
    include CompositeMatch
     def to_regexp_string
-      group @atoms.map {|p| p.to_regexp_string }.join ""
+      wrap @atoms.map {|p| p.to_regexp_string }.join ""
     end
   end
 
@@ -142,7 +142,7 @@ module TRegex
 
     def to_regexp_string
       # Subtle: when nil, we want min to convert to 0, but max to convert to ""
-      group atom.to_regexp_string + "{#{@min.to_i},#{@max}}"
+      wrap atom.to_regexp_string + "{#{@min.to_i},#{@max}}"
     end
   end
 end
