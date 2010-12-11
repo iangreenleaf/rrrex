@@ -48,6 +48,17 @@ end
 module TRegex
 
   WORD_CHAR = '\w'
+  DIGIT = '\d'
+  WHITESPACE = '\s'
+  LETTER = '[[:alpha:]]'
+
+  constants.each do |const|
+    ( class << self; self; end ).instance_eval do
+      define_method const.downcase.to_sym do
+        UnescapedStringMatch.new const_get( const )
+      end
+    end
+  end
 
   def self.any r
     NumberMatch.new r, 0, nil
@@ -55,10 +66,6 @@ module TRegex
 
   def self.some r
     NumberMatch.new r, 1, nil
-  end
-
-  def self.word_char
-    UnescapedStringMatch.new WORD_CHAR
   end
 
   class Match

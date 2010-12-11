@@ -112,6 +112,27 @@ class MatchTest < Test::Unit::TestCase
     assert_no_match 'a,b,c,d' do 2.or_more word_char end
   end
 
+  def test_digit_characters
+    assert_match "1", "12345" do digit end
+    assert_match "654321", "### abc654321baz123" do some digit end
+    assert_no_match 'abc_DEF *&".' do digit end
+    assert_no_match '1,2,3' do 2.or_more digit end
+  end
+
+  def test_letter_characters
+    assert_match "f", "foobar" do letter end
+    assert_match "foo", "### foo_bar2 baz bar" do some letter end
+    assert_no_match '?/."()123456_' do letter end
+    assert_no_match 'a1b2c3' do 2.or_more letter end
+  end
+
+  def test_whitespace_characters
+    assert_match " ", "    " do whitespace end
+    assert_match " \t ", "### \t baz bar" do some whitespace end
+    assert_no_match 'abc_123-+=().?!' do whitespace end
+    assert_no_match 'a b c d' do 2.or_more whitespace end
+  end
+
   def assert_no_match( string, &block )
     assert_nil( string.rmatch?( &block ) )
   end
