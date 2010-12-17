@@ -56,6 +56,22 @@ class MatchTest < Test::Unit::TestCase
     assert_no_match "xxxx" do some "y" end
   end
 
+  def test_match_not
+    assert_match "x", "x" do _not "y" end
+    assert_no_match "x" do _not "x" end
+    assert_match "cdef", "abcdefab" do some _not( "a".or "b" ) end
+    assert_match "defa", "abcdefaab" do some _not( "ab".or "b".or "c" ) end
+  end
+
+  def test_match_lookahead_not
+    assert_match "y", "xy" do letter.not "x" end
+    assert_match "1234", "123456789" do some( digit.not "5" ) end
+    assert_match "1234", "1234abc" do some( digit.not "5" ) end
+    assert_match "abb", "abcabb" do ( "ab" + letter ).not "abc" end
+    assert_no_match "abbbc" do "a" + ( (1..6).of "a" ).not( "aaa" ) + "c" end
+    assert_match "21", "123321" do 2.or_more digit.not ( "12".or "3" ) end
+  end
+
   def test_match_concat
     assert_match "foobar", "foobar" do "foo" + "bar" end
     assert_match "foobarbaz", "foobarbazbar" do "foo" + "bar" + "baz" end

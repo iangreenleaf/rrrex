@@ -68,6 +68,10 @@ module TRegex
     NumberMatch.new r, 1, nil
   end
 
+  def self._not r
+    UnescapedStringMatch.new('.').not r
+  end
+
   class Match
     def self.convert( atom )
       atom.kind_of?( Match ) ? atom : StringMatch.new( atom )
@@ -87,6 +91,10 @@ module TRegex
 
     def +(p)
       ConcatMatch.new self, p
+    end
+
+    def not(atom)
+      ConcatMatch.new NotMatch.new( atom ), self
     end
 
     protected
@@ -163,5 +171,12 @@ module TRegex
       # Subtle: when nil, we want min to convert to 0, but max to convert to ""
       wrap atom.to_regexp_string + "{#{@min.to_i},#{@max}}"
     end
+  end
+
+  class NotMatch < Match
+   include SingleAtomMatch
+   def to_regexp_string
+     "(?!#{atom.to_regexp_string})"
+   end
   end
 end
