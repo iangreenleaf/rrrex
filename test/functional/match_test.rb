@@ -101,13 +101,22 @@ class MatchTest < Test::Unit::TestCase
     assert_match "", "xxxxx" do 3.or_less "y" end
   end
 
-  def test_match_range
+  def test_range_of_matches
     assert_match "xx", "xx" do (2..4).of "x" end
     assert_match "xxx", "xxx" do (2..100).of "x" end
     assert_match "xxxx", "xxxxxxxx" do (2..4).of "x" end
     assert_no_match "foobar" do "f" + (3..4).of( "o" ) + "bar" end
     assert_no_match "foooooooobar" do "f" + (3..4).of( "o" ) + "bar" end
     assert_no_match "xxxx" do (1..100).of( "y" ) + "bar" end
+  end
+
+  def test_char_range
+    assert_match "b", "b" do "a".."c" end
+    assert_no_match "b" do "A".."C" end
+    assert_match "abc", "abcdefg" do 1.or_more "a".."c" end
+    assert_match "123", "123456789" do (1..4).of 1..3 end
+    assert_match "x8", "ax87" do 1.or_more( ("q".."z").or(8..9) ) end
+    assert_match "az", "az" do ("a".."c") + ("w".."z") end
   end
 
   def test_grouping
