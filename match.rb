@@ -4,6 +4,7 @@ module TRegex
   DIGIT = '\d'
   WHITESPACE = '\s'
   LETTER = '[[:alpha:]]'
+  ANY_CHAR = '.'
 
   constants.each do |const|
     ( class << self; self; end ).instance_eval do
