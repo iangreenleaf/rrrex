@@ -165,6 +165,14 @@ class MatchTest < Test::Unit::TestCase
     assert_no_match 'a b c d' do 2.or_more whitespace end
   end
 
+  def test_numeric_group
+    assert_match_backreferences ["a", "a"], "abc" do group "a" end
+    assert_match_backreferences ["ab", "a", "b"], "abc" do group( "a" ) + group( "b" ) end
+    assert_match_backreferences ["ab", "ab", "b"], "abc" do group( "a" + group( "b" ) ) end
+    assert_match_backreferences ["abcde", "abcde"], "abcde" do group( any word_char ) end
+    assert_match_backreferences ["abcde", "e"], "abcde" do any group( word_char ) end
+  end
+
   def assert_no_match( string, &block )
     assert_nil( string.rmatch?( &block ) )
   end
@@ -172,6 +180,11 @@ class MatchTest < Test::Unit::TestCase
   def assert_match( expected, string, &block )
     assert( matches = string.rmatch?( &block ) )
     assert_equal expected, matches[0]
+  end
+
+  def assert_match_backreferences( expected, string, &block )
+    assert( matches = string.rmatch?( &block ) )
+    assert_equal expected, matches.to_a
   end
 
 end

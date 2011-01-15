@@ -26,6 +26,20 @@ module TRegex
     UnescapedStringMatch.new('.').not r
   end
 
+  def self.group( name_or_atom=nil, atom=nil )
+    if name_or_atom.kind_of? Symbol
+      name = name_or_atom
+      atom = atom
+    elsif name_or_atom.kind_of? Hash
+      name = name_or_atom.keys.first
+      atom = name_or_atom[ name ]
+    else
+      name = nil
+      atom = name_or_atom
+    end
+    GroupMatch.new atom, name
+  end
+
   class Match
     def self.convert( atom )
       if atom.kind_of? Match
@@ -148,6 +162,17 @@ module TRegex
    include SingleAtomMatch
    def to_regexp_string
      "(?!#{atom.to_regexp_string})"
+   end
+  end
+
+  class GroupMatch < Match
+   include SingleAtomMatch
+   def initialize atom, name
+     super atom
+   end
+
+   def to_regexp_string
+     "(#{atom.to_regexp_string})"
    end
   end
 end
