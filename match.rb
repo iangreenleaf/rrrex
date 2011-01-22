@@ -40,6 +40,50 @@ module TRegex
     GroupMatch.new atom, name
   end
 
+  class Regexp < ::Regexp
+    def initialize( r )
+      super r.to_regexp_string
+      @atom = r
+    end
+
+    def match( str )
+      result = super( str )
+      MatchData.new @atom, result unless result.nil?
+    end
+  end
+
+  class MatchData
+    def initialize( atom, match_data )
+      @atom = atom
+      @match_data = match_data
+    end
+
+    def []( i )
+      if i.is_a? Symbol
+        named_groups[ i ]
+      else
+        @match_data[ i ]
+      end
+    end
+
+    def named_groups
+      result = {}
+      names = @atom.group_names
+      @atom.group_names.each_index do |i|
+        result[ names[ i ] ] = @match_data[ i ]
+      end
+      result
+    end
+
+    def to_a
+      @match_data.to_a
+    end
+
+    def method_missing( name, *args )
+      @match_data.send name, *args
+    end
+  end
+
   class Match
     def self.convert( atom )
       if atom.kind_of? Match
@@ -56,7 +100,7 @@ module TRegex
     end
 
     def match(str)
-      Regexp.new( to_regexp_string ).match str
+      Regexp.new( self ).match str
     end
 
     def or(atom)
@@ -69,6 +113,10 @@ module TRegex
 
     def not(atom)
       ConcatMatch.new NotMatch.new( atom ), self
+    end
+
+    def group_names
+      []
     end
 
     protected
@@ -92,12 +140,23 @@ module TRegex
     def to_regexp_string
       wrap atom.to_regexp_string
     end
+
+    def group_names
+      []
+      @atom.group_names if @atom.respond_to? :group_names
+    end
   end
 
   module CompositeMatch
     def initialize(*args)
       @atoms = args.collect do |a|
         input a
+      end
+    end
+
+    def group_names
+      @atoms.collect do |a|
+        a.group_names
       end
     end
   end
@@ -168,11 +227,17 @@ module TRegex
   class GroupMatch < Match
    include SingleAtomMatch
    def initialize atom, name
+     @name = name
      super atom
    end
 
    def to_regexp_string
      "(#{atom.to_regexp_string})"
+   end
+
+   def group_names
+     names = @atom.group_names || []
+     names.unshift @name
    end
   end
 end

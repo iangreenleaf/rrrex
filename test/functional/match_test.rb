@@ -173,6 +173,10 @@ class MatchTest < Test::Unit::TestCase
     assert_match_backreferences ["abcde", "e"], "abcde" do any group( word_char ) end
   end
 
+  def test_named_groups
+    assert_match_named_groups( { :my_a => "a" }, "abc" ) do group :my_a, "a" end
+  end
+
   def assert_no_match( string, &block )
     assert_nil( string.rmatch?( &block ) )
   end
@@ -185,6 +189,14 @@ class MatchTest < Test::Unit::TestCase
   def assert_match_backreferences( expected, string, &block )
     assert( matches = string.rmatch?( &block ) )
     assert_equal expected, matches.to_a
+  end
+
+  def assert_match_named_groups( expected, string, &block )
+    assert( matches = string.rmatch?( &block ) )
+    assert_equal expected, matches.named_groups
+    expected.each do |k,v|
+      assert_equal v, matches[ k ]
+    end
   end
 
 end
