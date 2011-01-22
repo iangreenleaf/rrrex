@@ -67,12 +67,15 @@ module TRegex
     end
 
     def named_groups
-      result = {}
-      names = @atom.group_names
-      @atom.group_names.each_index do |i|
-        result[ names[ i ] ] = @match_data[ i ]
-      end
-      result
+      @named_groups ||=
+        begin
+          result = {}
+          names = @atom.group_names
+          names.each_index do |i|
+            result[ names[ i ] ] = @match_data[ i ]
+          end
+          result
+        end
     end
 
     def to_a

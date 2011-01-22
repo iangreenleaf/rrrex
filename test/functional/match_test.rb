@@ -177,6 +177,15 @@ class MatchTest < Test::Unit::TestCase
     assert_match_named_groups( { :my_a => "a" }, "abc" ) do group :my_a, "a" end
   end
 
+  def test_named_groups_cached
+    assert( matches = "a".rmatch? do group :a, "a" end )
+    TRegex::GroupMatch.any_instance.expects( :group_names ).times( 1 ).returns( [] )
+    matches[ :a ]
+    matches[ :a ]
+    matches.named_groups
+    matches.named_groups
+  end
+
   def assert_no_match( string, &block )
     assert_nil( string.rmatch?( &block ) )
   end
