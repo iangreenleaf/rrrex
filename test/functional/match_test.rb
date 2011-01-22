@@ -184,6 +184,18 @@ class MatchTest < Test::Unit::TestCase
     assert_match_named_groups( { :letter => "e" }, "abcde" ) do any group( :letter, word_char ) end
   end
 
+  def test_named_groups_block_syntax
+    assert_match_named_groups( { :my_a => "a" }, "abc" ) do group :my_a do "a" end end
+    assert_match_named_groups( { :my_a => "a" }, "abc" ) do group( :my_a ) { "a" } end
+    assert_match_named_groups( { :full_match => "abc", :last_part => "bc" }, "abc" ) do
+      group :full_match do
+        "a" + group( :last_part ) do
+          "bz".or "bc".or "b"
+        end
+      end
+    end
+  end
+
   def test_named_groups_cached
     assert( matches = "a".rmatch? do group :a, "a" end )
     TRegex::GroupMatch.any_instance.expects( :group_names ).times( 1 ).returns( [] )

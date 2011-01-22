@@ -26,10 +26,10 @@ module TRegex
     UnescapedStringMatch.new('.').not r
   end
 
-  def self.group( name_or_atom=nil, atom=nil )
+  def self.group( name_or_atom=nil, atom=nil, &block )
     if name_or_atom.kind_of? Symbol
       name = name_or_atom
-      atom = atom
+      atom = atom || TRegex.module_exec( &block )
     elsif name_or_atom.kind_of? Hash
       name = name_or_atom.keys.first
       atom = name_or_atom[ name ]
