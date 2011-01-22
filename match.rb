@@ -72,7 +72,7 @@ module TRegex
           result = {}
           names = @atom.group_names
           names.each_index do |i|
-            result[ names[ i ] ] = @match_data[ i ]
+            result[ names[ i ] ] = @match_data[ i + 1 ]
           end
           result
         end
@@ -145,8 +145,11 @@ module TRegex
     end
 
     def group_names
-      []
-      @atom.group_names if @atom.respond_to? :group_names
+      if @atom.respond_to? :group_names
+        @atom.group_names if @atom.respond_to? :group_names
+      else
+        []
+      end
     end
   end
 
@@ -158,8 +161,8 @@ module TRegex
     end
 
     def group_names
-      @atoms.collect do |a|
-        a.group_names
+      @atoms.inject( [] ) do |memo,a|
+        memo + a.group_names
       end
     end
   end

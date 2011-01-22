@@ -171,10 +171,17 @@ class MatchTest < Test::Unit::TestCase
     assert_match_backreferences ["ab", "ab", "b"], "abc" do group( "a" + group( "b" ) ) end
     assert_match_backreferences ["abcde", "abcde"], "abcde" do group( any word_char ) end
     assert_match_backreferences ["abcde", "e"], "abcde" do any group( word_char ) end
+    assert_match_backreferences ["a", "a", nil], "abc" do group( "a" ).or group( "b" ) end
   end
 
   def test_named_groups
     assert_match_named_groups( { :my_a => "a" }, "abc" ) do group :my_a, "a" end
+    assert_match_named_groups( { :my_b => "b" }, "abc" ) do "a" + group( :my_b, "b" ) + "c" end
+    assert_match_named_groups( { :a => "a", :b => nil }, "abc" ) do group( :a, "a" ).or group( :b, "b" ) end
+    assert_match_named_groups( { :a => "ab", :b => "ab" }, "abc" ) do group( :a, group( :b, "ab" ) ) end
+    assert_match_named_groups( { :a => "ab", :b => "b" }, "abc" ) do group( :a, "a" + group( :b, "b" ) ) end
+    assert_match_named_groups( { :word => "abcde" }, "abcde" ) do group( :word, any( word_char ) ) end
+    assert_match_named_groups( { :letter => "e" }, "abcde" ) do any group( :letter, word_char ) end
   end
 
   def test_named_groups_cached
