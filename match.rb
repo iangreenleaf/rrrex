@@ -1,4 +1,4 @@
-module TRegex
+module TRegexp
 
   WORD_CHAR = '\w'
   DIGIT = '\d'
@@ -29,7 +29,7 @@ module TRegex
   def self.group( name_or_atom=nil, atom=nil, &block )
     if name_or_atom.kind_of? Symbol
       name = name_or_atom
-      atom = atom || TRegex.module_exec( &block )
+      atom = atom || TRegexp.module_exec( &block )
     elsif name_or_atom.kind_of? Hash
       name = name_or_atom.keys.first
       atom = name_or_atom[ name ]
@@ -274,11 +274,11 @@ end
 
 class String
   include MethodMissingConversion
-  sends_methods_to [ :or ], TRegex::StringMatch
+  sends_methods_to [ :or ], TRegexp::StringMatch
 
   def plus_with_regexp( str2 )
-    if str2.kind_of? TRegex::Match
-      TRegex::StringMatch.new( self ) + str2
+    if str2.kind_of? TRegexp::Match
+      TRegexp::StringMatch.new( self ) + str2
     else
       self.plus_without_regexp str2
     end
@@ -287,30 +287,30 @@ class String
   alias_method :+, :plus_with_regexp
 
   def rmatch?( &block )
-    pattern = TRegex::Match.convert TRegex.module_exec &block
+    pattern = TRegexp::Match.convert TRegexp.module_exec &block
     pattern.match self
   end
 end
 
 class Fixnum
   def exactly( atom )
-    TRegex::NumberMatch.new atom, self, self
+    TRegexp::NumberMatch.new atom, self, self
   end
 
   def or_more( atom )
-    TRegex::NumberMatch.new atom, self, nil
+    TRegexp::NumberMatch.new atom, self, nil
   end
 
   def or_less( atom )
-    TRegex::NumberMatch.new atom, nil, self
+    TRegexp::NumberMatch.new atom, nil, self
   end
 end
 
 class Range
   include MethodMissingConversion
-  sends_methods_to [ :or, :+ ], TRegex::RangeMatch
+  sends_methods_to [ :or, :+ ], TRegexp::RangeMatch
 
   def of( atom )
-    TRegex::NumberMatch.new atom, self.begin, self.end
+    TRegexp::NumberMatch.new atom, self.begin, self.end
   end
 end
