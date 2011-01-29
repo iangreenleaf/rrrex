@@ -1,7 +1,7 @@
 require 'test/unit'
 require 'rubygems'
 require 'mocha'
-require 'Match'
+require 'tregexp'
 
 class MatchTest < Test::Unit::TestCase
 
