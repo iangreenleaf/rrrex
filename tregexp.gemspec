@@ -12,6 +12,6 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "mocha"
 
-  gem.files = Dir[ 'lib/**/*.rb', 'test/**/*' ]
+  gem.files = Dir[ 'lib/**/*.rb', 'test/**/*', '[A-Z]*' ]
 
 end
