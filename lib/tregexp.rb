@@ -1,3 +1,1 @@
-require 'fixnum'
-require 'range'
-require 'string'
+require 'tregexp/core_ext'
