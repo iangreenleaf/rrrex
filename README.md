@@ -40,8 +40,18 @@ Special character sets:
 Or create your own:
     "abc".rmatch? { 3.exactly "a".."c" }
 
-TODO Doc
-========
-_not
-.not
-groups
+Two types of negation:
+    "x".rmatch? { word_char.not "x" } # => nil
+    "y".rmatch? { word_char.not "x" }
+    "x".rmatch? { _not "x" } # => nil
+    "y".rmatch? { _not "x" }
+
+Groups:
+    match = "1234567890       Central Processing".rmatch? do
+        group :serial do
+            some digit
+        end + some whitespace + group :source do
+            any any_char
+        end
+    end
+    match
