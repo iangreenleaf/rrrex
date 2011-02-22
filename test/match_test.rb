@@ -69,7 +69,7 @@ class MatchTest < Test::Unit::TestCase
     assert_match "1234", "1234abc" do some( digit.not "5" ) end
     assert_match "abb", "abcabb" do ( "ab" + letter ).not "abc" end
     assert_no_match "abbbc" do "a" + ( (1..6).of "a" ).not( "aaa" ) + "c" end
-    assert_match "21", "123321" do 2.or_more digit.not ( "12".or "3" ) end
+    assert_match "21", "123321" do 2.or_more digit.not( "12".or "3" ) end
   end
 
   def test_match_concat
