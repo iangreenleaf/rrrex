@@ -27,7 +27,7 @@ module TRegexp
     end
 
     def self._not r
-      UnescapedStringMatch.new('.').not r
+      any_char.not r
     end
 
     def self.group( name_or_atom=nil, atom=nil, &block )
