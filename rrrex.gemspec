@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.email = %q{ian.greenleaf+github@gmail.com}
   s.extra_rdoc_files = ["README.md"]
   s.files = ["lib/rrrex.rb", "lib/rrrex/match_data.rb", "lib/rrrex/or_match.rb", "lib/rrrex/single_atom_match.rb", "lib/rrrex/regexp.rb", "lib/rrrex/dsl_context.rb", "lib/rrrex/match.rb", "lib/rrrex/not_match.rb", "lib/rrrex/group_match.rb", "lib/rrrex/number_match.rb", "lib/rrrex/core_ext.rb", "lib/rrrex/range_match.rb", "lib/rrrex/unescaped_string_match.rb", "lib/rrrex/string_match.rb", "lib/rrrex/core_ext/string.rb", "lib/rrrex/core_ext/fixnum.rb", "lib/rrrex/core_ext/range.rb", "lib/rrrex/composite_match.rb", "lib/rrrex/concat_match.rb", "lib/method_missing_conversion.rb", "test/match_test.rb", "LICENSE", "Rakefile", "README.md"]
+  s.homepage = %q{https://github.com/youngian/rrrex}
   s.rdoc_options = ["--main", "README.md"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
