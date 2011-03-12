@@ -14,14 +14,14 @@ task :default => ["test"]
 
 spec = Gem::Specification.new do |s|
 
-  s.name = "tregexp"
+  s.name = "rrrex"
   s.version = "0.1.0"
   s.author = "Ian Young"
   s.email = "ian.greenleaf+github@gmail.com"
 
-  s.summary = "Readable Regexps"
+  s.summary = "Really Readable Regexps"
   s.description = <<-EOF
-    TRegexp is a new syntax for regular expressions.
+    Rrrex is a new syntax for regular expressions.
     Less compact, but human-readable. By regular humans.
   EOF
 

@@ -1,5 +1,5 @@
-require 'tregexp/match_data'
-module TRegexp
+require 'rrrex/match_data'
+module Rrrex
   class Regexp < ::Regexp
     def initialize( r )
       super r.to_regexp_string

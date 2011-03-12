@@ -1,27 +1,27 @@
 require 'test/unit'
 require 'rubygems'
 require 'mocha'
-require 'tregexp'
+require 'rrrex'
 
 class MatchTest < Test::Unit::TestCase
 
   def test_match_simple_string
     [ ["a", "a"], ["bc", "babb bc"], ["úñícode", "i like úñícode"] ].each do |pattern,string|
-      m = TRegexp::StringMatch.new pattern
+      m = Rrrex::StringMatch.new pattern
       assert m.match string
     end
   end
 
   def test_dont_match_simple_string
     [ ["a", "b"], ["bc", "bac def"], ["úñícode", "i like unicode"] ].each do |pattern,string|
-      m = TRegexp::StringMatch.new pattern
+      m = Rrrex::StringMatch.new pattern
       assert_nil m.match string
     end
   end
 
   def test_inline_match_triggers_module
-    rxp_stub = stub "TRegexp::Match", { :match => true }
-    TRegexp::StringMatch.expects(:new).with("oo").returns(rxp_stub)
+    rxp_stub = stub "Rrrex::Match", { :match => true }
+    Rrrex::StringMatch.expects(:new).with("oo").returns(rxp_stub)
     "foobar".rmatch? do "oo" end
   end
 
@@ -198,7 +198,7 @@ class MatchTest < Test::Unit::TestCase
 
   def test_named_groups_cached
     assert( matches = "a".rmatch? do group :a, "a" end )
-    TRegexp::GroupMatch.any_instance.expects( :group_names ).times( 1 ).returns( [] )
+    Rrrex::GroupMatch.any_instance.expects( :group_names ).times( 1 ).returns( [] )
     matches[ :a ]
     matches[ :a ]
     matches.named_groups

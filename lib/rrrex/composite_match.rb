@@ -1,5 +1,5 @@
-require 'tregexp/composite_match'
-module TRegexp
+require 'rrrex/composite_match'
+module Rrrex
   module CompositeMatch
     def initialize(*args)
       @atoms = args.collect do |a|

@@ -1,4 +1,4 @@
-module TRegexp
+module Rrrex
   class MatchData
     def initialize( atom, match_data )
       @atom = atom

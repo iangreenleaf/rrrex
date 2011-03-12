@@ -1,4 +1,4 @@
-module TRegexp
+module Rrrex
   module SingleAtomMatch
 
     attr_reader :atom

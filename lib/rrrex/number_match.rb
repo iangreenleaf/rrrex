@@ -1,6 +1,6 @@
-require 'tregexp/match'
-require 'tregexp/single_atom_match'
-module TRegexp
+require 'rrrex/match'
+require 'rrrex/single_atom_match'
+module Rrrex
   class NumberMatch < Match
     include SingleAtomMatch
     def initialize( a, min, max )

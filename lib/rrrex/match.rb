@@ -1,14 +1,14 @@
-module TRegexp
+module Rrrex
   class Match
   end
 end
-require 'tregexp/regexp'
-require 'tregexp/string_match'
-require 'tregexp/range_match'
-require 'tregexp/or_match'
-require 'tregexp/concat_match'
-require 'tregexp/not_match'
-module TRegexp
+require 'rrrex/regexp'
+require 'rrrex/string_match'
+require 'rrrex/range_match'
+require 'rrrex/or_match'
+require 'rrrex/concat_match'
+require 'rrrex/not_match'
+module Rrrex
   class Match
     def self.convert( atom )
       if atom.kind_of? Match

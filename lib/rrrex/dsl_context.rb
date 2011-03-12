@@ -1,7 +1,7 @@
-require 'tregexp/unescaped_string_match'
-require 'tregexp/group_match'
-require 'tregexp/number_match'
-module TRegexp
+require 'rrrex/unescaped_string_match'
+require 'rrrex/group_match'
+require 'rrrex/number_match'
+module Rrrex
   module DslContext
 
     WORD_CHAR = '\w'

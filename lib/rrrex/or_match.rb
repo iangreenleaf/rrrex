@@ -1,6 +1,6 @@
-require 'tregexp/match'
-require 'tregexp/composite_match'
-module TRegexp
+require 'rrrex/match'
+require 'rrrex/composite_match'
+module Rrrex
   class OrMatch < Match
    include CompositeMatch
     def to_regexp_string

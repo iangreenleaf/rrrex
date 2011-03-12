@@ -1,7 +1,7 @@
-Readable Regexps
+Really Readable Regular Expressions
 ================
 
-tregexp is a new syntax for regular expressions. It trades compactness for readability by real humans, and picks up a couple nice perks
+rrrex is a new syntax for regular expressions. It trades compactness for readability by real humans, and picks up a couple nice perks
 along the way.
 
 Crash Course
