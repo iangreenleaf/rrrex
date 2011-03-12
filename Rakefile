@@ -56,3 +56,19 @@ desc 'Clear out RDoc and generated packages'
 task :clean => [:clobber_rdoc, :clobber_package] do
   rm "#{spec.name}.gemspec"
 end
+
+desc 'Tag the repository in git with gem version number'
+task :tag => [:gemspec, :package] do
+  if `git diff --cached`.empty?
+    if `git tag`.split("\n").include?("v#{spec.version}")
+      raise "Version #{spec.version} has already been released"
+    end
+    `git add #{File.expand_path("../#{spec.name}.gemspec", __FILE__)}`
+    `git commit -m "Released version #{spec.version}"`
+    `git tag v#{spec.version}`
+    `git push --tags`
+    `git push`
+  else
+    raise "Unstaged changes still waiting to be committed"
+  end
+end
