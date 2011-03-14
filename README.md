@@ -46,7 +46,11 @@ Two types of negation:
     "x".rmatch? { _not "x" } # => nil
     "y".rmatch? { _not "x" }
 
+
 Groups:
+    "aaabc".rmatch? { group(1.or_more "a") }[1]
+    "aaabc".rmatch? { group(:alpha, (1.or_more "a")) }[:alpha]
+
     match = "1234567890       Central Processing".rmatch? do
         group :serial do
             some digit
@@ -55,3 +59,5 @@ Groups:
         end
     end
     match
+
+
