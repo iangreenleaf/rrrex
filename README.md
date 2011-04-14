@@ -4,6 +4,8 @@ Really Readable Regular Expressions
 rrrex is a new syntax for regular expressions. It trades compactness for readability by real humans, and picks up a couple nice perks
 along the way.
 
+[![Build Status](http://travis-ci.org/iangreenleaf/rrrex.png)](http://travis-ci.org/iangreenleaf/rrrex)
+
 Crash Course
 ============
 
