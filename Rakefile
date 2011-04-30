@@ -25,7 +25,7 @@ spec = Gem::Specification.new do |s|
     Less compact, but human-readable. By regular humans.
   EOF
 
-  s.homepage = "https://github.com/youngian/rrrex"
+  s.homepage = "https://github.com/iangreenleaf/rrrex"
 
   s.files = Dir[ 'lib/**/*.rb', 'test/**/*', '[A-Z]*' ]
 
