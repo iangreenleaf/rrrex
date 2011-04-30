@@ -40,6 +40,10 @@ And these are equivalent:
     "aaabc".rmatch? { 1.or_more "a" }
     "aaabc".rmatch? { some "a" }
 
+Repetition can be nongreedy:
+
+    "aaabc".rmatch? { 2.or_more "a", :greedy => false } # matches "aa"
+
 Special character sets:
 
     "abc1234.&*".rmatch? { 10.exactly any_char }

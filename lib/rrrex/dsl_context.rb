@@ -18,12 +18,12 @@ module Rrrex
       end
     end
 
-    def self.any r
-      NumberMatch.new r, 0, nil
+    def self.any r, opts={}
+      NumberMatch.new r, 0, nil, opts
     end
 
-    def self.some r
-      NumberMatch.new r, 1, nil
+    def self.some r, opts={}
+      NumberMatch.new r, 1, nil, opts
     end
 
     def self._not r

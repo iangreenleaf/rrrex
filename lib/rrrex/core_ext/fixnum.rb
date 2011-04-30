@@ -3,11 +3,11 @@ class Fixnum
     Rrrex::NumberMatch.new atom, self, self
   end
 
-  def or_more( atom )
-    Rrrex::NumberMatch.new atom, self, nil
+  def or_more( atom, opts={} )
+    Rrrex::NumberMatch.new atom, self, nil, opts
   end
 
-  def or_less( atom )
-    Rrrex::NumberMatch.new atom, nil, self
+  def or_less( atom, opts={} )
+    Rrrex::NumberMatch.new atom, nil, self, opts
   end
 end

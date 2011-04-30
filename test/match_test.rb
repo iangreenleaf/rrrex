@@ -49,11 +49,21 @@ class MatchTest < Test::Unit::TestCase
     assert_match "", "xxxx" do any "y" end
   end
 
+  def test_match_any_nongreedy
+    assert_match "", "x" do any "x", :greedy => false end
+    # WTF Ruby 1.8 bug
+    #assert_match "abbbbc", "abbbbc" do "a" + any( "a", :greedy => false ) + "c" end
+  end
+
   def test_match_some
     assert_match "x", "x" do some "x" end
     assert_match "aaaaa", "aaaaab" do some "a" end
     assert_match "abab", "ababaab" do some "ab" end
     assert_no_match "xxxx" do some "y" end
+  end
+
+  def test_match_some_nongreedy
+    assert_match "a", "aaaaab" do some "a", :greedy => false end
   end
 
   def test_match_not
@@ -91,6 +101,11 @@ class MatchTest < Test::Unit::TestCase
     assert_no_match "foobar" do 3.or_more "o" end
   end
 
+  def test_match_num_or_more_nongreedy
+    assert_match "foo", "foooobar" do "f" + 2.or_more( "o", :greedy => false ) end
+    assert_no_match "foobar" do 3.or_more "o", :greedy => false end
+  end
+
   def test_match_num_or_less
     assert_match "xx", "xx" do 2.or_less "x" end
     assert_match "xx", "xxxxxxxx" do 2.or_less "x" end
@@ -101,6 +116,12 @@ class MatchTest < Test::Unit::TestCase
     assert_match "", "xxxxx" do 3.or_less "y" end
   end
 
+  def test_match_num_or_less_nongreedy
+    assert_match "", "xx" do 2.or_less "x", :greedy => false end
+    # WTF Ruby 1.8 bug
+    #assert_match "foobar", "foobar" do "f" + 2.or_less( "o", :greedy => false ) + "bar" end
+  end
+
   def test_range_of_matches
     assert_match "xx", "xx" do (2..4).of "x" end
     assert_match "xxx", "xxx" do (2..100).of "x" end
@@ -108,6 +129,10 @@ class MatchTest < Test::Unit::TestCase
     assert_no_match "foobar" do "f" + (3..4).of( "o" ) + "bar" end
     assert_no_match "foooooooobar" do "f" + (3..4).of( "o" ) + "bar" end
     assert_no_match "xxxx" do (1..100).of( "y" ) + "bar" end
+  end
+
+  def test_range_nongereedy
+    assert_match "xx", "xxxx" do (2..4).of "x", :greedy => false end
   end
 
   def test_char_range
