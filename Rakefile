@@ -33,6 +33,7 @@ spec = Gem::Specification.new do |s|
   s.extra_rdoc_files  = %w(README.md)
   s.rdoc_options      = %w(--main README.md)
 
+  s.add_dependency("regin")
   s.add_development_dependency("mocha")
 end
 
