@@ -230,6 +230,10 @@ class MatchTest < Test::Unit::TestCase
     matches.named_groups
   end
 
+  def test_to_string
+    assert_equal( "(?:(?:a)|(?:b))", Rrrex.to_s do "a".or "b" end )
+  end
+
   def assert_no_match( string, &block )
     assert_nil( string.rmatch?( &block ) )
   end
