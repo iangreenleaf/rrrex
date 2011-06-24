@@ -1,17 +1,18 @@
+require 'regin'
 module Rrrex
-  class Match
+  module Match
   end
 end
 require 'rrrex/regexp'
 require 'rrrex/string_match'
-require 'rrrex/range_match'
+#require 'rrrex/range_match'
 require 'rrrex/or_match'
-require 'rrrex/concat_match'
-require 'rrrex/not_match'
+#require 'rrrex/concat_match'
+#require 'rrrex/not_match'
 module Rrrex
-  class Match
+  module Match
     def self.convert( atom )
-      if atom.kind_of? Match
+      if atom.kind_of?( Match ) || atom.kind_of?( OrMatch )
         atom
       elsif atom.kind_of? Range
         RangeMatch.new atom
@@ -29,7 +30,7 @@ module Rrrex
     end
 
     def or(atom)
-      OrMatch.new self, atom
+      OrMatch.new self, input( atom )
     end
 
     def +(p)
@@ -46,7 +47,7 @@ module Rrrex
 
     protected
     def input( atom )
-      self.class.convert atom
+      Match.convert atom
     end
   end
 end

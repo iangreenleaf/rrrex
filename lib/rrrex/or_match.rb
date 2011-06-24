@@ -1,10 +1,11 @@
 require 'rrrex/match'
 require 'rrrex/composite_match'
 module Rrrex
-  class OrMatch < Match
-   include CompositeMatch
+  class OrMatch < Regin::Alternation
+    include CompositeMatch
+    include Match
     def to_regexp_string
-      wrap @atoms.map {|p| p.to_regexp_string }.join "|"
+      wrap( map {|p| p.to_regexp_string }.join "|" )
     end
   end
 end

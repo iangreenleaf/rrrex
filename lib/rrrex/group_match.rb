@@ -1,7 +1,7 @@
 require 'rrrex/match'
 require 'rrrex/single_atom_match'
 module Rrrex
-  class GroupMatch < Match
+  class GroupMatch < Regin::Group
    include SingleAtomMatch
    def initialize atom, name
      @name = name
