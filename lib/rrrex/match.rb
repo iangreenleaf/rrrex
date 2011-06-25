@@ -12,8 +12,10 @@ require 'rrrex/or_match'
 module Rrrex
   module Match
     def self.convert( atom )
-      if atom.kind_of?( Match ) || atom.kind_of?( OrMatch )
+      if atom.kind_of?( Regin::Expression ) || atom.kind_of?( Regin::Alternation ) || atom.kind_of?( Regin::Group )
         atom
+      elsif atom.kind_of?( Regin::CharacterClass )
+        Regin::Expression.new atom
       elsif atom.kind_of? Range
         RangeMatch.new atom
       else

@@ -7,13 +7,13 @@ module Rrrex
     WORD_CHAR = '\w'
     DIGIT = '\d'
     WHITESPACE = '\s'
-    LETTER = '[[:alpha:]]'
+    LETTER = '[:alpha:]'
     ANY_CHAR = '.'
 
     constants.each do |const|
       ( class << self; self; end ).instance_eval do
         define_method const.downcase.to_sym do
-          UnescapedStringMatch.new const_get( const )
+          Regin::Expression.new Regin::CharacterClass.new const_get( const )
         end
       end
     end

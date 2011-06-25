@@ -2,7 +2,6 @@ require 'rrrex/match'
 require 'rrrex/single_atom_match'
 module Rrrex
   class NumberMatch < Regin::Group
-    include SingleAtomMatch
     def initialize( a, min, max, opts={} )
       # Subtle: when nil, we want min to convert to 0, but max to convert to ""
       super a, :quantifier => "{#{@min.to_i},#{@max}}"
