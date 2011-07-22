@@ -5,7 +5,7 @@ module Rrrex
 end
 require 'rrrex/regexp'
 require 'rrrex/string_match'
-#require 'rrrex/range_match'
+require 'rrrex/range_match'
 require 'rrrex/or_match'
 #require 'rrrex/concat_match'
 #require 'rrrex/not_match'
@@ -33,10 +33,6 @@ module Rrrex
 
     def or(atom)
       OrMatch.new self, input( atom )
-    end
-
-    def +(p)
-      ConcatMatch.new self, p
     end
 
     def not(atom)

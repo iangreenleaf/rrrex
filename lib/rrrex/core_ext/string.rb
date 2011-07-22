@@ -7,7 +7,7 @@ class String
   sends_methods_to [ :or ], Rrrex::StringMatch
 
   def plus_with_regexp( str2 )
-    if str2.kind_of? Rrrex::Match
+    if str2.kind_of? Regin::Expression
       Rrrex::StringMatch.new( self ) + str2
     else
       self.plus_without_regexp str2
