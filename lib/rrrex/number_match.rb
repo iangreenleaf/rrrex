@@ -3,11 +3,11 @@ require 'rrrex/single_atom_match'
 module Rrrex
   class NumberMatch < Regin::Group
     def initialize( a, min, max, opts={} )
-      # Subtle: when nil, we want min to convert to 0, but max to convert to ""
-      super a, :quantifier => "{#{@min.to_i},#{@max}}"
       @opts = { :greedy => true }.merge opts
       @min = min
       @max = max
+      # Subtle: when nil, we want min to convert to 0, but max to convert to ""
+      super a, :quantifier => "{#{@min.to_i},#{@max}}"
     end
 
     def to_regexp_string
