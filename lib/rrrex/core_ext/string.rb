@@ -17,7 +17,6 @@ class String
   alias_method :+, :plus_with_regexp
 
   def rmatch?( &block )
-    pattern = Rrrex::Match.convert Rrrex::DslContext.module_exec &block
-    pattern.match self
+    Rrrex.build( &block ).match self
   end
 end

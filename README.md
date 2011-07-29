@@ -23,6 +23,13 @@ You can combine operations and get the expected precedence:
 
     "abc".rmatch? { "ab" + ( "z".or "c" ) }
 
+You can use `Rrrex.build` to make reusable, composable objects:
+
+    names = Rrrex.build { "foo".or "bar" }
+    nums = Rrrex.build { "1".or "2" }
+    names.match "foo"
+    "foo112".rmatch? { names + ( some nums )}
+
 Repetition:
 
     "aaabc".rmatch? { 1.or_more "a" }

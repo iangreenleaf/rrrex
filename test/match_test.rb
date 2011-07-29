@@ -234,6 +234,47 @@ class MatchTest < Test::Unit::TestCase
     assert_equal( "(?:(?:a)|(?:b))", Rrrex.to_s do "a".or "b" end )
   end
 
+  def test_build_standalone
+    expr = Rrrex.build do "a".or "b" end
+    assert expr.match( "a" )
+  end
+
+  def test_concat_standalone
+    e1 = Rrrex.build do "a".or "x" end
+    e2 = Rrrex.build do "b".or "y" end
+    expr = e1 + e2
+    assert expr.match( "ab" )
+    assert expr.match( "xy" )
+    assert expr.match( "ay" )
+  end
+
+  def test_other_operators_accept_standalones
+    expr = Rrrex.build do "x".or "y" end
+
+    assert_match "x", "xyz" do "foo".or expr end
+
+    assert_match "xy", "xy" do any expr end
+    assert_match "xy", "xy" do some expr end
+
+    assert_match "z", "xyz" do _not expr end
+    assert_match "z", "xyz" do letter.not expr end
+
+    assert_match "xx", "xxx" do 2.exactly expr end
+    assert_match "xxx", "xxx" do 2.or_more expr end
+    assert_match "xx", "xxx" do 2.or_less expr end
+    assert_match "xxx", "xxx" do (2..4).of expr end
+
+    assert_match_backreferences ["x", "x"], "xyz" do group expr end
+    assert_match_named_groups( { :my_group => "x" }, "xyz" ) do group :my_group, expr end
+    assert_match_named_groups( { :my_group => "x" }, "xyz" ) do group :my_group do expr end end
+  end
+
+  def test_standalone_provides_other_operators
+    expr = Rrrex.build do "x".or "y" end
+    assert_match "x", "xyz" do expr.or "foo" end
+    assert_match "y", "xy" do expr.not "x" end
+  end
+
   def assert_no_match( string, &block )
     assert_nil( string.rmatch?( &block ) )
   end
