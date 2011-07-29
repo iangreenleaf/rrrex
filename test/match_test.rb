@@ -144,7 +144,7 @@ class MatchTest < Test::Unit::TestCase
     assert_match "az", "az" do ("a".."c") + ("w".."z") end
   end
 
-  def test_grouping
+  def test_precedence
     assert_match "foobar", "foobar" do "foo" + ( "xyz".or "bar" ) end
     assert_match "bar", "foobar" do ( "xyz" + "foo" ).or "bar" end
     assert_match "fo", "foobar" do ( "xyz" + "foo" ).or( "xyz".or "fo" ).or( "foo" + "xyz" ) end
